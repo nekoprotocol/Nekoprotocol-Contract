@@ -1,0 +1,27 @@
+{
+  "name": "neko_contract",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "truffle test",
+    "deploy_rinkeby": "truffle migrate --network rinkeby",
+    "deploy_bsctestnet": "truffle migrate --network bsctestnet"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.2",
+    "@openzeppelin/contracts-upgradeable": "^4.5.2",
+    "@pancakeswap/pancake-swap-lib": "0.0.4",
+    "@truffle/hdwallet-provider": "^2.0.0",
+    "bn.js": "^5.2.0",
+    "dotenv": "^10.0.0",
+    "ethers": "^5.7.2",
+    "truffle-assertions": "^0.9.2"
+  },
+  "devDependencies": {
+    "@openzeppelin/truffle-upgrades": "^1.14.0",
+    "truffle-plugin-verify": "^0.5.20"
+  }
+}
