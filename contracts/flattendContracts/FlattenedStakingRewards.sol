@@ -489,7 +489,6 @@ contract StakingRewards is Initializable {
     uint8 public constant KIND_STAKING = 1;
     
     IERC20 public stakingToken;
-    IERC20 public rewardsToken;
     IManekiNeko manekineko;
 
     address public owner;
@@ -566,7 +565,6 @@ contract StakingRewards is Initializable {
         require(_amount > 0, "amount = 0");
         stakingToken.transferFrom(msg.sender, address(this), _amount);
         balanceOf[msg.sender] += _amount;
-        // if(timeCanWithdraw[msg.sender] == 0) timeCanWithdraw[msg.sender] = block.timestamp + timeLockToken;
         totalSupply += _amount;
         emit Staking(msg.sender, _amount);
     }

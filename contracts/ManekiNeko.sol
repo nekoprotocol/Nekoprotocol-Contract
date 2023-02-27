@@ -4,12 +4,11 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "./INekoProtocolToken.sol";
 
-contract ManekiNekoProxy is Initializable, OwnableUpgradeable, ReentrancyGuardUpgradeable {
+contract ManekiNeko is Ownable, ReentrancyGuard {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
@@ -64,7 +63,7 @@ contract ManekiNekoProxy is Initializable, OwnableUpgradeable, ReentrancyGuardUp
     address public devAddress;
 
     //NekoProtocol tokens created per block.
-    uint256 public tokenPerBlock;
+    uint256 public tokenPerBlock = 1875481992000000000000;
 
     bool public paused = false;
 
@@ -76,11 +75,11 @@ contract ManekiNekoProxy is Initializable, OwnableUpgradeable, ReentrancyGuardUp
     // Info of each user that lock LP tokens.
     mapping(uint256 => mapping(address => LockLpInfo)) public lockLpInfo;
     // Total allocation points. Must be the sum of all allocation points in all pools.
-    uint256 public totalAllocPoint;
+    uint256 public totalAllocPoint = 0;
     // The block number when Test mining starts.
     uint256 public startBlock;
     // Time lock LP when withdraw
-    uint256 lockLpTime;
+    uint256 lockLpTime = 7 days;
 
     event Deposit(address indexed user, uint256 indexed pid, uint256 amount);
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
@@ -90,17 +89,15 @@ contract ManekiNekoProxy is Initializable, OwnableUpgradeable, ReentrancyGuardUp
     event UpdateEmissionRate(address indexed user, uint256 tokenPerBlock);
     event ClaimTokenomic(address indexed request, address indexed to, uint256 amount);
 
-    function initialize(
+    constructor(
         INekoProtocolToken _token,
         uint256 _startBlock,
         address _devAddress
-    ) public initializer {
-        __Ownable_init_unchained();
+    ) {
         token = _token;
         startBlock = _startBlock;
         devAddress = _devAddress;
-        tokenPerBlock = 1875481992000000000000;
-        lockLpTime = 7 days;
+        
         tokenomics.push(
             Tokenomic({
                 contractAddress: address(0),
