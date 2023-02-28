@@ -221,7 +221,7 @@ contract ManekiNeko is Ownable, ReentrancyGuard {
         uint256 multiplier = getMultiplier(pool.lastRewardBlock, block.number);
         uint256 tokenReward = multiplier.mul(tokenPerBlock).mul(pool.allocPoint).div(totalAllocPoint);
         token.beckon(address(this), tokenReward);
-        token.beckon(devAddress, tokenReward.div(10));
+        token.beckon(devAddress, tokenReward.div(100));
 
         pool.accTokenPerShare = pool.accTokenPerShare.add(tokenReward.mul(1e18).div(lpSupply));
         pool.lastRewardBlock = block.number;
@@ -259,7 +259,7 @@ contract ManekiNeko is Ownable, ReentrancyGuard {
         if (_amount > 0) {
             user.amount = user.amount.sub(_amount);
             LockLpInfo storage lockInfo = lockLpInfo[_pid][msg.sender];
-            lockInfo.amount.add(_amount);
+            lockInfo.amount = lockInfo.amount.add(_amount);
             lockInfo.timeUnlock = block.timestamp + lockLpTime;
         }
         user.rewardDebt = user.amount.mul(pool.accTokenPerShare).div(1e18);
@@ -284,7 +284,7 @@ contract ManekiNeko is Ownable, ReentrancyGuard {
         user.amount = 0;
         user.rewardDebt = 0;
         LockLpInfo storage lockInfo = lockLpInfo[_pid][msg.sender];
-        lockInfo.amount.add(amount);
+        lockInfo.amount = lockInfo.amount.add(amount);
         lockInfo.timeUnlock = block.timestamp + lockLpTime;
         emit EmergencyWithdraw(msg.sender, _pid, amount);
     }
@@ -367,5 +367,4 @@ contract ManekiNeko is Ownable, ReentrancyGuard {
         require(_startTime >= block.timestamp, "start time must be after now");
         infoTokenomic.startTime = _startTime;
     }
-
 }
